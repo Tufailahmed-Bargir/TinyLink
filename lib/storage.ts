@@ -1,104 +1,61 @@
 import type { TinyLink } from "./types"
 
-const STORAGE_KEY = "tinylink_links"
-
-export function getLinks(): TinyLink[] {
-  if (typeof window === "undefined") return []
-  const stored = localStorage.getItem(STORAGE_KEY)
-  return stored ? JSON.parse(stored) : []
-}
-
-export function saveLinks(links: TinyLink[]): void {
-  if (typeof window === "undefined") return
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(links))
-}
-
-export function generateShortCode(): string {
-  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
-  let result = ""
-  for (let i = 0; i < 6; i++) {
-    result += chars.charAt(Math.floor(Math.random() * chars.length))
-  }
-  return result
-}
-
-export function createLink(originalUrl: string, customCode?: string, expiresAt?: string | null): TinyLink {
-  const links = getLinks()
-  let shortCode = customCode || generateShortCode()
-
-  // Ensure unique short code
-  while (links.some((link) => link.shortCode === shortCode)) {
-    shortCode = generateShortCode()
-  }
-
-  const newLink: TinyLink = {
-    id: crypto.randomUUID(),
-    originalUrl,
-    shortCode,
-    createdAt: new Date().toISOString(),
-    expiresAt: expiresAt || null,
-    clicks: 0,
+function mapServerLinkToTiny(link: any): TinyLink {
+  return {
+    id: String(link.id),
+    originalUrl: link.targetUrl,
+    shortCode: link.code,
+    createdAt: link.createdAt,
+    expiresAt: null,
+    clicks: link.totalClicks ?? 0,
     clickHistory: [],
   }
-
-  saveLinks([newLink, ...links])
-  return newLink
 }
 
-export function updateLink(
-  id: string,
-  updates: Partial<Pick<TinyLink, "originalUrl" | "shortCode" | "expiresAt">>,
-): TinyLink | null {
-  const links = getLinks()
-  const index = links.findIndex((link) => link.id === id)
-
-  if (index === -1) return null
-
-  // Check for duplicate short code
-  if (updates.shortCode) {
-    const duplicate = links.find((link) => link.shortCode === updates.shortCode && link.id !== id)
-    if (duplicate) return null
-  }
-
-  links[index] = { ...links[index], ...updates }
-  saveLinks(links)
-  return links[index]
+export async function getLinks(): Promise<TinyLink[]> {
+  if (typeof window === "undefined") return []
+  const res = await fetch('/api/links')
+  if (!res.ok) return []
+  const data = await res.json()
+  const links = data.links || []
+  return links.map(mapServerLinkToTiny)
 }
 
-export function deleteLink(id: string): boolean {
-  const links = getLinks()
-  const filtered = links.filter((link) => link.id !== id)
-  if (filtered.length === links.length) return false
-  saveLinks(filtered)
-  return true
+export async function createLink(originalUrl: string, customCode?: string, expiresAt?: string | null): Promise<TinyLink | null> {
+  const body: any = { targetUrl: originalUrl }
+  if (customCode) body.customCode = customCode
+  if (expiresAt) body.expiresAt = expiresAt
+
+  const res = await fetch('/api/links', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  })
+
+  if (!res.ok) return null
+  const data = await res.json()
+  const link = data.link
+  return mapServerLinkToTiny(link)
 }
 
-export function recordClick(shortCode: string, referrer?: string): TinyLink | null {
-  const links = getLinks()
-  const index = links.findIndex((link) => link.shortCode === shortCode)
-
-  if (index === -1) return null
-
-  const link = links[index]
-
-  // Check if expired
-  if (link.expiresAt && new Date(link.expiresAt) < new Date()) {
-    return null
-  }
-
-  links[index] = {
-    ...link,
-    clicks: link.clicks + 1,
-    clickHistory: [...link.clickHistory, { timestamp: new Date().toISOString(), referrer: referrer || null }],
-  }
-
-  saveLinks(links)
-  return links[index]
+export async function deleteLink(code: string): Promise<boolean> {
+  const res = await fetch(`/api/links/${encodeURIComponent(code)}`, { method: 'DELETE' })
+  return res.ok
 }
 
-export function getLinkByShortCode(shortCode: string): TinyLink | null {
-  const links = getLinks()
-  return links.find((link) => link.shortCode === shortCode) || null
+export async function getLinkByShortCode(code: string): Promise<TinyLink | null> {
+  if (typeof window === 'undefined') return null
+  const res = await fetch(`/api/links/${encodeURIComponent(code)}`)
+  if (!res.ok) return null
+  const data = await res.json()
+  const link = data.data || data.link
+  if (!link) return null
+  return mapServerLinkToTiny(link)
+}
+
+export async function recordClick(shortCode: string, referrer?: string): Promise<TinyLink | null> {
+  // No server endpoint to increment clicks; fetch latest data for the code
+  return getLinkByShortCode(shortCode)
 }
 
 export function isLinkExpired(link: TinyLink): boolean {

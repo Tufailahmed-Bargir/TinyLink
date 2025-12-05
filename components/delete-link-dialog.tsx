@@ -17,7 +17,7 @@ interface DeleteLinkDialogProps {
   link: TinyLink | null
   open: boolean
   onClose: () => void
-  onConfirm: (id: string) => void
+  onConfirm: (code: string) => void
 }
 
 export function DeleteLinkDialog({ link, open, onClose, onConfirm }: DeleteLinkDialogProps) {
@@ -27,7 +27,7 @@ export function DeleteLinkDialog({ link, open, onClose, onConfirm }: DeleteLinkD
     if (!link) return
     setIsDeleting(true)
     await new Promise((resolve) => setTimeout(resolve, 300))
-    onConfirm(link.id)
+    onConfirm(link.shortCode)
     setIsDeleting(false)
     onClose()
   }

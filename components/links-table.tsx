@@ -23,7 +23,7 @@ interface LinksTableProps {
   links: TinyLink[]
   isLoading: boolean
   onEdit: (id: string, updates: Partial<Pick<TinyLink, "originalUrl" | "shortCode" | "expiresAt">>) => TinyLink | null
-  onDelete: (id: string) => void
+  onDelete: (code: string) => void
 }
 
 export function LinksTable({ links, isLoading, onEdit, onDelete }: LinksTableProps) {

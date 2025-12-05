@@ -6,7 +6,7 @@ import Link from "next/link"
 import { Link2, AlertCircle, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { getLinkByShortCode, recordClick, isLinkExpired } from "@/lib/storage"
+import { getLinkByShortCode, isLinkExpired } from "@/lib/storage"
 
 export default function RedirectPage() {
   const params = useParams()
@@ -15,25 +15,24 @@ export default function RedirectPage() {
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    const link = getLinkByShortCode(code)
+    ;(async () => {
+      const link = await getLinkByShortCode(code)
 
-    if (!link) {
-      setError("not-found")
-      setIsLoading(false)
-      return
-    }
+      if (!link) {
+        setError("not-found")
+        setIsLoading(false)
+        return
+      }
 
-    if (isLinkExpired(link)) {
-      setError("expired")
-      setIsLoading(false)
-      return
-    }
+      if (isLinkExpired(link)) {
+        setError("expired")
+        setIsLoading(false)
+        return
+      }
 
-    // Record the click
-    recordClick(code, document.referrer || undefined)
-
-    // Redirect to the original URL
-    window.location.href = link.originalUrl
+      // Redirect to the original URL
+      window.location.href = link.originalUrl
+    })()
   }, [code])
 
   if (isLoading) {

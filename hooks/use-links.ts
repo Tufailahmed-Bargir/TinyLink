@@ -2,25 +2,28 @@
 
 import { useState, useEffect, useCallback } from "react"
 import type { TinyLink } from "@/lib/types"
-import { getLinks, createLink, updateLink, deleteLink, recordClick } from "@/lib/storage"
+import { getLinks as fetchLinks, createLink as apiCreateLink, deleteLink as apiDeleteLink, getLinkByShortCode as apiGetLinkByCode } from "@/lib/storage"
 
 export function useLinks() {
   const [links, setLinks] = useState<TinyLink[]>([])
   const [isLoading, setIsLoading] = useState(true)
 
-  const refresh = useCallback(() => {
-    setLinks(getLinks())
+  const refresh = useCallback(async () => {
+    const res = await fetchLinks()
+    setLinks(res)
   }, [])
 
   useEffect(() => {
-    refresh()
-    setIsLoading(false)
+    ;(async () => {
+      await refresh()
+      setIsLoading(false)
+    })()
   }, [refresh])
 
   const addLink = useCallback(
-    (originalUrl: string, customCode?: string, expiresAt?: string | null) => {
-      const newLink = createLink(originalUrl, customCode, expiresAt)
-      refresh()
+    async (originalUrl: string, customCode?: string, expiresAt?: string | null) => {
+      const newLink = await apiCreateLink(originalUrl, customCode, expiresAt)
+      await refresh()
       return newLink
     },
     [refresh],
@@ -28,26 +31,26 @@ export function useLinks() {
 
   const editLink = useCallback(
     (id: string, updates: Partial<Pick<TinyLink, "originalUrl" | "shortCode" | "expiresAt">>) => {
-      const updated = updateLink(id, updates)
-      if (updated) refresh()
-      return updated
+      // No backend update endpoint available — no-op for now
+      return null
     },
-    [refresh],
+    [],
   )
 
   const removeLink = useCallback(
-    (id: string) => {
-      const success = deleteLink(id)
-      if (success) refresh()
+    async (code: string) => {
+      const success = await apiDeleteLink(code)
+      if (success) await refresh()
       return success
     },
     [refresh],
   )
 
   const trackClick = useCallback(
-    (shortCode: string, referrer?: string) => {
-      const updated = recordClick(shortCode, referrer)
-      if (updated) refresh()
+    async (shortCode: string, referrer?: string) => {
+      // No dedicated click endpoint; fetch latest data
+      const updated = await apiGetLinkByCode(shortCode)
+      if (updated) await refresh()
       return updated
     },
     [refresh],

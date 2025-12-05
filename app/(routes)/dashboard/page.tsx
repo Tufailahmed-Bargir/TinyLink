@@ -25,9 +25,9 @@ function DashboardContent() {
     }
   }, [initialUrl])
 
-  const handleShorten = (url: string, customCode?: string, expiresAt?: string | null) => {
-    const newLink = addLink(url, customCode, expiresAt)
-    setCreatedLink(newLink)
+  const handleShorten = async (url: string, customCode?: string, expiresAt?: string | null) => {
+    const newLink = await addLink(url, customCode, expiresAt)
+    setCreatedLink(newLink as any)
     setShowForm(false)
   }
 
@@ -35,8 +35,8 @@ function DashboardContent() {
     return editLink(id, updates)
   }
 
-  const handleDelete = (id: string) => {
-    removeLink(id)
+  const handleDelete = async (code: string) => {
+    await removeLink(code)
   }
 
   return (
