@@ -6,7 +6,7 @@ import { NextRequest, NextResponse } from 'next/server';
  
  
  
-
+// creating a link
 export async function POST(req: NextRequest, res: NextResponse) {
   try{
     const body = await req.json();
@@ -72,6 +72,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
   }
 }
 
+// get list of all the links
 export async function GET(){
 
     try {

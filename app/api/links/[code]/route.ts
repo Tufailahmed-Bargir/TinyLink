@@ -2,7 +2,7 @@
 import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
  
-
+// rout to delete the link
 export async function DELETE(
   request: NextRequest,
   { params }: { params: { code: string } }
@@ -25,13 +25,14 @@ export async function DELETE(
 }catch(e){
     return NextResponse.json({
         msg:"error found!",
+        // @ts-expect-error some error
         error:e.message
     })
 }
   
   }
 
-
+// get rout to get the link stat
   export async function GET(
   request: NextRequest,
   { params }: { params: { code: string } }

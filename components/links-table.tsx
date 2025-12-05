@@ -34,9 +34,9 @@ export function LinksTable({ links, isLoading, onEdit, onDelete }: LinksTablePro
 
   const getShortUrl = (shortCode: string) => {
     if (typeof window !== "undefined") {
-      return `${window.location.origin}/r/${shortCode}`
+      return `${window.location.origin}/${shortCode}`
     }
-    return `/r/${shortCode}`
+    return `/${shortCode}`
   }
 
   const copyToClipboard = async (link: TinyLink) => {

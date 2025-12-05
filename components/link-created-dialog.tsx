@@ -19,7 +19,7 @@ export function LinkCreatedDialog({ link, open, onClose }: LinkCreatedDialogProp
   if (!link) return null
 
   const shortUrl =
-    typeof window !== "undefined" ? `${window.location.origin}/r/${link.shortCode}` : `/r/${link.shortCode}`
+    typeof window !== "undefined" ? `${window.location.origin}/${link.shortCode}` : `/${link.shortCode}`
 
   const copyToClipboard = async () => {
     await navigator.clipboard.writeText(shortUrl)
