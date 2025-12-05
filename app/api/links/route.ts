@@ -70,3 +70,19 @@ export async function POST(req: NextRequest, res: NextResponse) {
     })
   }
 }
+
+export async function GET(){
+
+    try {
+       const allLinks = await prisma.link.findMany() 
+       return NextResponse.json({
+        msg:"these are all the links from db!",
+        links:allLinks
+       }, {status:200})
+    } catch (error) {
+        return NextResponse.json({
+            msg:"error found",
+            error:error.message
+        })
+    }
+}
