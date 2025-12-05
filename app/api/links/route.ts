@@ -66,6 +66,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
   } catch(e) {
     return NextResponse.json({
         msg:"some error",
+        // @ts-expect-error some error
         error:e.message
     })
   }
@@ -82,6 +83,7 @@ export async function GET(){
     } catch (error) {
         return NextResponse.json({
             msg:"error found",
+            // @ts-expect-error some error
             error:error.message
         })
     }
