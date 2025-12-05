@@ -19,4 +19,17 @@ model User{
   email String @unique
   password String?
   image String?
+  
+}
+
+model Link {
+  id           Int       @id @default(autoincrement())
+  code         String    @unique  
+  targetUrl    String  
+  shortLink String   
+  totalClicks  Int       @default(0)
+  lastClicked  DateTime?  
+ 
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
 }
