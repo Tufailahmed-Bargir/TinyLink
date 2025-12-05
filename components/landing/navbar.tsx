@@ -35,8 +35,8 @@ export function Navbar() {
         </nav>
 
         <div className="flex items-center gap-3">
-          <Button variant="ghost" size="sm" className="text-muted-foreground" asChild>
-            <Link href="/dashboard">Sign In</Link>
+          <Button variant="ghost" size="sm" className="text-muted-foreground"  >
+            <Link href="/login">Login</Link>
           </Button>
           <Button size="sm" className="bg-accent text-accent-foreground hover:bg-accent/90" asChild>
             <Link href="/dashboard">Get Started Free</Link>
