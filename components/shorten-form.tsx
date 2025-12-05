@@ -9,13 +9,17 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
+import { isValidUrl } from "@/lib/validate"
 
 interface ShortenFormProps {
   onShorten: (url: string, customCode?: string, expiresAt?: string | null) => void
   initialUrl?: string
 }
 
-export function ShortenForm({ onShorten, initialUrl = "" }: ShortenFormProps) {
+export function ShortenForm({ 
+  
+  
+  onShorten, initialUrl = "" }: ShortenFormProps) {
   const [url, setUrl] = useState(initialUrl)
   const [customCode, setCustomCode] = useState("")
   const [expiresAt, setExpiresAt] = useState("")
@@ -23,14 +27,7 @@ export function ShortenForm({ onShorten, initialUrl = "" }: ShortenFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState("")
 
-  const validateUrl = (url: string): boolean => {
-    try {
-      new URL(url)
-      return true
-    } catch {
-      return false
-    }
-  }
+  
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -41,7 +38,7 @@ export function ShortenForm({ onShorten, initialUrl = "" }: ShortenFormProps) {
       return
     }
 
-    if (!validateUrl(url)) {
+    if (!isValidUrl(url)) {
       setError("Please enter a valid URL (include http:// or https://)")
       return
     }
