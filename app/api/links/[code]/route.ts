@@ -68,6 +68,7 @@ if (!linkStat) {
 }catch(e){
     return NextResponse.json({
         msg:"error found!",
+        // @ts-expect-error some error
         error:e.message
     })
 }
