@@ -9,6 +9,7 @@ function mapServerLinkToTiny(link: any): TinyLink {
     expiresAt: null,
     clicks: link.totalClicks ?? 0,
     clickHistory: [],
+    lastClicked: link.lastClicked ? new Date(link.lastClicked).toISOString() : null,
   }
 }
 
