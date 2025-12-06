@@ -5,8 +5,9 @@
 <img width="1893" height="800" alt="Screenshot 2025-12-05 233653" src="https://github.com/user-attachments/assets/2b9cb22b-c55d-4e9c-8295-6f3af10b88e3" /></br>
 # <div align="center">  Dashboard Page  </div>
 <img width="1583" height="754" alt="Screenshot 2025-12-05 233718" src="https://github.com/user-attachments/assets/1f371fc4-873f-4d5b-960d-fe0dc526a726" /></br>
-# <div align="center">  Stat of link Page  </div>
-<img width="842" height="734" alt="Screenshot 2025-12-05 233817" src="https://github.com/user-attachments/assets/2cdf8282-d78d-46fc-b5cc-c2550903a9f4" /></br>
+# <div align="center">  Stat of link  </div>
+<img width="1146" height="858" alt="Screenshot 2025-12-06 190839" src="https://github.com/user-attachments/assets/8624f692-c849-4283-842f-e5bec6615fb7" />
+</br>
 # <div align="center">  Deleting functionality  </div>
 <img width="743" height="347" alt="Screenshot 2025-12-05 233739" src="https://github.com/user-attachments/assets/9977b46f-a47f-4898-9a0e-79d30a63069d" /></br>
 # <div align="center">Signin using google using next authentication (Optional Not mentioned in the assignment)</div>
