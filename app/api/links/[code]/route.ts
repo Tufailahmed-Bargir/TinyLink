@@ -46,9 +46,11 @@ export async function DELETE(
     where:{
         code
     }, select: {
+        id: true,
         code: true,
         targetUrl: true,
-        totalClicks: true,  
+        totalClicks: true,
+        lastClicked: true,
         updatedAt:true,
         createdAt: true,
       },
