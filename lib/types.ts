@@ -6,6 +6,7 @@ export interface TinyLink {
   expiresAt: string | null
   clicks: number
   clickHistory: ClickEvent[]
+  lastClicked?: string | null
 }
 
 export interface ClickEvent {
