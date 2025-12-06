@@ -1,22 +1,14 @@
 "use client"
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
+ import Link from "next/link"
 import { ArrowRight, Zap, CheckCircle, Clock } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+ 
 
 export function HeroSection() {
-  const [url, setUrl] = useState("")
-  const router = useRouter()
+   
 
-  const handleShorten = () => {
-    if (url) {
-      router.push(`/dashboard?url=${encodeURIComponent(url)}`)
-    } else {
-      router.push("/dashboard")
-    }
-  }
+   
 
   return (
     <section className="relative py-20 md:py-28">
@@ -41,23 +33,18 @@ export function HeroSection() {
 
           {/* URL Input Form */}
           <div className="mx-auto mb-8 flex max-w-xl flex-col gap-3 sm:flex-row">
-            <Input
-              type="url"
-              placeholder="Paste your long URL here..."
-              value={url}
-              onChange={(e) => setUrl(e.target.value)}
-              className="h-12 flex-1 bg-background border-border text-base"
-              onKeyDown={(e) => e.key === "Enter" && handleShorten()}
-            />
+             
             <Button
               size="lg"
-              className="h-12 px-6 bg-accent text-accent-foreground hover:bg-accent/90"
-              onClick={handleShorten}
+              className="h-12 w-full px-6 bg-accent text-accent-foreground hover:bg-accent/90"
+               
             >
+             <Link href={'/'}>
               Shorten URL
+            </Link>
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
-          </div>
+          </div> 
 
           {/* Trust Indicators */}
           <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-muted-foreground">
